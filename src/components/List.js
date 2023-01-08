@@ -18,10 +18,23 @@ function List() {
     getPizzas();
   }, []);
 
+  const onAdd = (pizza) => {
+    const exist = cartItems.find((x) => x.id === pizza.id);
+    if (exist) {
+      setCartItems(
+        cartItems.map((x) =>
+          x.id === pizza.id ? { ...exist, qty: exist.qty + 1 } : x
+        )
+      );
+    } else {
+      setCartItems([...cartItems, { ...pizza, qty: 1 }]);
+    }
+  };
+
   return (
     <main>
       {pizzas.map((pizza) => {
-        return <Product key={pizza.id} pizza={pizza}></Product>;
+        return <Product key={pizza.id} pizza={pizza} onAdd={onAdd}></Product>;
       })}
     </main>
   );
