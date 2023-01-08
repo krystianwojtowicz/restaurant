@@ -11,15 +11,6 @@ const firebaseConfig = {
   appId: `${process.env.REACT_APP_API_ID}`,
   measurementId: `${process.env.REACT_APP_MEASUREMENT_ID}`,
 };
-// const firebaseConfig = {
-//   apiKey: "AIzaSyB7pst-HN9BfYkS0I-Jcy8oRoYGAPOghEA",
-//   authDomain: "restaurant-18a3a.firebaseapp.com",
-//   projectId: "restaurant-18a3a",
-//   storageBucket: "restaurant-18a3a.appspot.com",
-//   messagingSenderId: "760338775468",
-//   appId: "1:760338775468:web:a531353c01b37b7cf14e09",
-//   measurementId: "G-C92FVQNMQM"
-// };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
