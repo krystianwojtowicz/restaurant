@@ -1,5 +1,5 @@
 function Confirmation() {
-  return <div>Confirmation</div>;
+  return <main>Confirmation</main>;
 }
 
 export default Confirmation;
