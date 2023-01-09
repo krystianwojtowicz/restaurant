@@ -4,8 +4,6 @@ import Product from "./Product";
 import { collection, getDocs } from "firebase/firestore";
 import { OrderContext } from "./OrderContext";
 
-// comments:
-// i can add localStorage, ts
 function List() {
   const { cartItems, setCartItems } = useContext(OrderContext);
   const [pizzas, setPizzas] = useState([]);
