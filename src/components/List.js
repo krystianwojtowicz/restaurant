@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { db } from "../firebase-config";
 import Product from "./Product";
 import { collection, getDocs } from "firebase/firestore";
+import { OrderContext } from "./OrderContext";
 
 // comments:
 // i can add localStorage, ts
 function List() {
+  const { cartItems, setCartItems } = useContext(OrderContext);
   const [pizzas, setPizzas] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
   const pizzasCollectionRef = collection(db, "meals");
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function List() {
     } else {
       setCartItems([...cartItems, { ...pizza, qty: 1 }]);
     }
+    console.log(cartItems);
   };
 
   return (
