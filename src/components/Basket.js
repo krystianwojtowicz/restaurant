@@ -4,6 +4,13 @@ import { OrderContext } from "./OrderContext";
 function Basket(props) {
   const { cartItems, setCartItems } = useContext(OrderContext);
 
+  const removeAllPizzasOfOneKind = (product) => {
+    const exist = cartItems.find((x) => x.id === product.id);
+    if (exist.qty !== 0) {
+      setCartItems(cartItems.filter((x) => x.id !== product.id));
+    }
+  };
+
   return (
     <main>
       <div>
@@ -16,6 +23,10 @@ function Basket(props) {
               <h5>${item.price}</h5>
             </div>
             <div>
+              <i
+                className="fas fa-trash"
+                onClick={() => removeAllPizzasOfOneKind(item)}
+              ></i>
               <i
                 className="fas fa-chevron-up"
                 onClick={() => props.addPizza(item)}
