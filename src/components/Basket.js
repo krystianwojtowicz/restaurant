@@ -1,8 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { OrderContext } from "./OrderContext";
 
 function Basket(props) {
   const { cartItems, setCartItems } = useContext(OrderContext);
+  const { order, setOrder } = useContext(OrderContext);
+  const [customerName, setCustomerName] = useState("");
 
   const removeAllPizzasOfOneKind = (product) => {
     const exist = cartItems.find((x) => x.id === product.id);
@@ -11,6 +13,11 @@ function Basket(props) {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setOrder({ ...cartItems, customerName });
+  };
+  console.log(order);
   return (
     <main>
       <div>
@@ -42,7 +49,17 @@ function Basket(props) {
           </div>
         ))}
       </div>
-      <button>order</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="name"
+          onChange={(e) => setCustomerName(e.target.value)}
+          name="customerName"
+          value={customerName}
+          required
+        />
+        <button type="submit">submit</button>
+      </form>
       {/* name, address, date, mail, phone, what */}
     </main>
   );

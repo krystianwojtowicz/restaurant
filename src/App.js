@@ -9,6 +9,7 @@ import "./App.scss";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
+  const [order, setOrder] = useState("");
 
   const addPizza = (pizza) => {
     const exist = cartItems.find((x) => x.id === pizza.id);
@@ -38,7 +39,7 @@ function App() {
   };
 
   return (
-    <OrderContext.Provider value={{ cartItems, setCartItems }}>
+    <OrderContext.Provider value={{ cartItems, setCartItems, order, setOrder }}>
       <div className="App">
         <BrowserRouter>
           {/* <nav>
@@ -50,7 +51,7 @@ function App() {
             </ul>
           </nav> */}
           <nav>
-            <span>PIZZA HUNT</span>
+            <span>PIZZA HUT</span>
             <Link to="/basket">Basket</Link>
             <Link to="/confirmation">Confirmation</Link>
             <Link to="/">Home</Link>
