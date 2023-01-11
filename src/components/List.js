@@ -4,7 +4,7 @@ import Product from "./Product";
 import { collection, getDocs } from "firebase/firestore";
 import { OrderContext } from "./OrderContext";
 
-function List() {
+function List(props) {
   const { cartItems, setCartItems } = useContext(OrderContext);
   const [pizzas, setPizzas] = useState([]);
   const pizzasCollectionRef = collection(db, "meals");
@@ -17,24 +17,16 @@ function List() {
     getPizzas();
   }, []);
 
-  const onAdd = (pizza) => {
-    const exist = cartItems.find((x) => x.id === pizza.id);
-    if (exist) {
-      setCartItems(
-        cartItems.map((x) =>
-          x.id === pizza.id ? { ...exist, qty: exist.qty + 1 } : x
-        )
-      );
-    } else {
-      setCartItems([...cartItems, { ...pizza, qty: 1 }]);
-    }
-    console.log(cartItems);
-  };
-
   return (
     <main>
       {pizzas.map((pizza) => {
-        return <Product key={pizza.id} pizza={pizza} onAdd={onAdd}></Product>;
+        return (
+          <Product
+            key={pizza.id}
+            pizza={pizza}
+            addPizza={props.addPizza}
+          ></Product>
+        );
       })}
     </main>
   );
