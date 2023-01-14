@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
 // import { Link, HashRouter as BrowserRouter, Routes, Route } from "react-router-dom";
+// import { db } from "./firebase-config";
 import Basket from "./components/Basket";
 import List from "./components/List";
 import Confirmation from "./components/Confirmation";
 import { OrderContext } from "./components/OrderContext";
 import "./App.scss";
-import { collection, getDocs } from "firebase/firestore";
+// import { collection, getDocs } from "firebase/firestore";
 // import { db } from "./firebase-config";
 
 function App() {
