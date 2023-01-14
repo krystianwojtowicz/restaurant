@@ -5,7 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { OrderContext } from "./OrderContext";
 
 // comments:
-// i can add localStorage, ts, readme, scrapowanie, firebase problem?, img-links, icons-upgrade
+// i can add localStorage, ts, readme, scrapowanie, firebase problem?, img-links, icons-upgrade, yup
 function List(props) {
   const { cartItems, setCartItems } = useContext(OrderContext);
   const [pizzas, setPizzas] = useState([]);
