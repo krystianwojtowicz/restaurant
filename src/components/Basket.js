@@ -144,7 +144,7 @@ function Basket(props) {
           onChange={handleChange}
           name="numberOfFlat"
           type="number"
-          placeholder="number of flat"
+          placeholder="number of flat(optional)"
         ></Input>
         <Input
           value={formValues.date}
