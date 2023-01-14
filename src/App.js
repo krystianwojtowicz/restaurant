@@ -6,20 +6,27 @@ import List from "./components/List";
 import Confirmation from "./components/Confirmation";
 import { OrderContext } from "./components/OrderContext";
 import "./App.scss";
+import { collection, getDocs } from "firebase/firestore";
+// import { db } from "./firebase-config";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
+  const [order, setOrder] = useState({});
 
   const addPizza = (pizza) => {
     const exist = cartItems.find((x) => x.id === pizza.id);
+    let pizzaWithoutIngredients = { ...pizza };
+    delete pizzaWithoutIngredients.ingredients;
     if (exist) {
       setCartItems(
         cartItems.map((x) =>
-          x.id === pizza.id ? { ...exist, qty: exist.qty + 1 } : x
+          x.id === pizzaWithoutIngredients.id
+            ? { ...exist, qty: exist.qty + 1 }
+            : x
         )
       );
     } else {
-      setCartItems([...cartItems, { ...pizza, qty: 1 }]);
+      setCartItems([...cartItems, { ...pizzaWithoutIngredients, qty: 1 }]);
     }
     console.log(cartItems);
   };
@@ -41,14 +48,6 @@ function App() {
     <OrderContext.Provider value={{ cartItems, setCartItems }}>
       <div className="App">
         <BrowserRouter>
-          {/* <nav>
-            <ul>
-              <li>PIZZA HUNT</li>
-              <li>
-                <Link to="/basket">Basket</Link>
-              </li>
-            </ul>
-          </nav> */}
           <nav>
             <span>PIZZA HUNT</span>
             <Link to="/basket">Basket</Link>
@@ -58,7 +57,13 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<List addPizza={addPizza} removePizza={removePizza} />}
+              element={
+                <List
+                  addPizza={addPizza}
+                  removePizza={removePizza}
+                  // pizzasCollectionRef={pizzasCollectionRef}
+                />
+              }
             ></Route>
             <Route
               path="/basket"
