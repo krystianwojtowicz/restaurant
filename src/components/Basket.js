@@ -3,39 +3,50 @@ import { db } from "../firebase-config";
 import { collection, addDoc } from "firebase/firestore";
 import { OrderContext } from "./OrderContext";
 import Input from "./Input";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import "yup-phone";
 // import Select from "react-select";
 
-const defaultData = {
-  customerName: "",
-  street: "",
-  city: "",
-  numberOfStreet: "",
-  numberOfFlat: "",
-  date: "11:30",
-  email: "",
-  phone: 0,
-};
-
 function Basket(props) {
-  // const options = [];
-
-  // const generateOptions = () => {
-  //   const d = new Date();
-  //   const time = d.getHours() + ":" + d.getMinutes();
-  //   let hours = d.getHours();
-  //   let over15 = Math.floor(d.getMinutes() / 15) + 2;
-  //   if (over15 >= 4) {
-  //     over15 -= 4;
-  //     hours += 1;
-  //   }
-  //   const option = hours + ":" + over15 * 15;
-  //   options.push(option);
-  // };
-  // generateOptions();
-
+  const formik = useFormik({
+    initialValues: {
+      customerName: "",
+      city: "",
+      street: "",
+      numberOfStreet: "",
+      numberOfFlat: "",
+      date: "11:30",
+      email: "",
+      phone: "",
+    },
+    validationSchema: Yup.object({
+      customerName: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+      city: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+      street: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+      numberOfStreet: Yup.string()
+        .max(15, "Must be 5 characters or less")
+        .required("Required"),
+      numberOfFlat: Yup.number().min(1, "Min value 1."),
+      email: Yup.string().email().required("Required"),
+      phone: Yup.string().phone("PL").required("Required"),
+    }),
+    onSubmit: (values) => {
+      setOrder({ ...cartItems, ...values });
+      // await addDoc(props.pizzasCollectionRef, order);
+      setIsSubmit(true);
+      // console.warn(values);
+    },
+  });
+  // console.warn(formik.errors);
   const { cartItems, setCartItems } = useContext(OrderContext);
   const { order, setOrder } = useContext(OrderContext);
-  const [formValues, setFormValues] = useState(defaultData);
   const [isSubmit, setIsSubmit] = useState(false);
   const ordersCollectionRef = collection(db, "orders");
 
@@ -52,7 +63,7 @@ function Basket(props) {
     // array.map((item) => {
     //   delete item.id;
     // });
-    setOrder({ ...cartItems, ...formValues });
+    setOrder({ ...cartItems, ...formik.values });
     // await addDoc(props.pizzasCollectionRef, order);
     setIsSubmit(true);
   };
@@ -67,14 +78,9 @@ function Basket(props) {
     }
   }, [isSubmit]);
 
-  const handleChange = (e) => {
-    // const { name, value } = e.target;
-    // setFormValues({ ...formValues, [name]: value });
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    console.log(formValues);
-  };
-
-  console.log(order);
+  // console.warn(formik.touched);
+  // console.log(order);
+  //   console.warn(formik.values);
   return (
     <main>
       <div>
@@ -106,70 +112,96 @@ function Basket(props) {
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}> */}
+      <form onSubmit={formik.handleSubmit}>
         <Input
           type="text"
           placeholder="name"
-          onChange={handleChange}
+          onChange={formik.handleChange}
           name="customerName"
-          value={formValues.customerName}
-          required
+          value={formik.values.customerName}
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.customerName && formik.errors.customerName ? (
+          <p>{formik.errors.customerName}</p>
+        ) : null}
         <Input
           type="text"
           placeholder="city"
-          onChange={handleChange}
+          onChange={formik.handleChange}
           name="city"
-          value={formValues.city}
-          required
+          value={formik.values.city}
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.city && formik.errors.city ? (
+          <p>{formik.errors.city}</p>
+        ) : null}
         <Input
-          value={formValues.street}
-          onChange={handleChange}
+          value={formik.values.street}
+          onChange={formik.handleChange}
           name="street"
           type="text"
           placeholder="street"
-          required
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.street && formik.errors.street ? (
+          <p>{formik.errors.street}</p>
+        ) : null}
         <Input
-          value={formValues.numberOfStreet}
-          onChange={handleChange}
+          value={formik.values.numberOfStreet}
+          onChange={formik.handleChange}
           name="numberOfStreet"
           type="string"
           placeholder="number of street"
-          required
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.numberOfStreet && formik.errors.numberOfStreet ? (
+          <p>{formik.errors.numberOfStreet}</p>
+        ) : null}
         <Input
-          value={formValues.numberOfFlat}
-          onChange={handleChange}
+          value={formik.values.numberOfFlat}
+          onChange={formik.handleChange}
           name="numberOfFlat"
           type="number"
           placeholder="number of flat(optional)"
+          onBlur={formik.handleBlur}
         ></Input>
-        <Input
-          value={formValues.date}
-          onChange={handleChange}
+        {formik.touched.numberOfFlat && formik.errors.numberOfFlat ? (
+          <p>{formik.errors.numberOfFlat}</p>
+        ) : null}
+        {/* <Input
+          value={formik.values.date}
+          onChange={formik.handleChange}
           name="date"
           type="string"
-          required
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.date && formik.errors.date ? (
+          <p>{formik.errors.date}</p>
+        ) : null} */}
         {/* <Select options={options} /> */}
         <Input
-          value={formValues.email}
-          onChange={handleChange}
+          value={formik.values.email}
+          onChange={formik.handleChange}
           name="email"
           type="string"
-          required
           placeholder="email"
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.email && formik.errors.email ? (
+          <p>{formik.errors.email}</p>
+        ) : null}
         <Input
-          value={formValues.phone}
-          onChange={handleChange}
+          value={formik.values.phone}
+          onChange={formik.handleChange}
           name="phone"
-          type="number"
-          required
+          type="string"
           placeholder="phone"
+          onBlur={formik.handleBlur}
         ></Input>
+        {formik.touched.phone && formik.errors.phone ? (
+          <p>{formik.errors.phone}</p>
+        ) : null}
         <button type="submit">submit</button>
       </form>
       {/* name, address-city street number number, date, mail, phone, what */}
