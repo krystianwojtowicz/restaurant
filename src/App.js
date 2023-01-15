@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
-// import { Link, HashRouter as BrowserRouter, Routes, Route } from "react-router-dom";
+// import {
+//   Link,
+//   HashRouter as BrowserRouter,
+//   Routes,
+//   Route,
+// } from "react-router-dom";
 // import { db } from "./firebase-config";
 import Basket from "./components/Basket";
 import List from "./components/List";
@@ -11,7 +16,9 @@ import "./App.scss";
 // import { db } from "./firebase-config";
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(
+    JSON.parse(localStorage.getItem("cartItems")) || []
+  );
   const [order, setOrder] = useState({});
 
   const addPizza = (pizza) => {
@@ -29,6 +36,7 @@ function App() {
     } else {
       setCartItems([...cartItems, { ...pizzaWithoutIngredients, qty: 1 }]);
     }
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
     console.log(cartItems);
   };
 
