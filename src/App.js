@@ -54,7 +54,7 @@ function App() {
   };
 
   return (
-    <OrderContext.Provider value={{ cartItems, setCartItems }}>
+    <OrderContext.Provider value={{ cartItems, setCartItems, order, setOrder }}>
       <div className="App">
         <BrowserRouter>
           <nav>
